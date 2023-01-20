@@ -9,6 +9,7 @@ import gg.xp.xivdata.data.duties.*;
 import gg.xp.xivsupport.callouts.CalloutRepo;
 import gg.xp.xivsupport.callouts.ModifiableCallout;
 import gg.xp.xivsupport.events.actlines.events.AbilityCastStart;
+import gg.xp.xivsupport.events.actlines.events.BuffApplied;
 import gg.xp.xivsupport.events.actlines.events.HeadMarkerEvent;
 import gg.xp.xivsupport.events.actlines.events.TetherEvent;
 import gg.xp.xivsupport.events.state.XivState;
@@ -44,8 +45,10 @@ public class BaldesionArsenal extends AutoChildEventHandler implements FilteredE
 
 	// --------------------------------------------------------
 	// Ovni (Testing)
-	@NpcCastCallout({0x39C5}) // TODO: Buff applied instead
-	private final ModifiableCallout<AbilityCastStart> fluorescence = ModifiableCallout.durationBasedCall("Fluorescence", "Dispell");
+	//@NpcCastCallout({0x39C5}) // TODO: Buff applied instead
+	//private final ModifiableCallout<AbilityCastStart> fluorescence = ModifiableCallout.durationBasedCall("Fluorescence", "Dispell");
+	private final ModifiableCallout<BuffApplied> fluorescence = new ModifiableCallout<>("Fluorescence", "Dispell");
+
 	@NpcCastCallout({0x39C0})
 	private final ModifiableCallout<AbilityCastStart> megastorm = ModifiableCallout.durationBasedCall("Megastorm", "In");
 	@NpcCastCallout({0x39BF})
@@ -116,23 +119,23 @@ public class BaldesionArsenal extends AutoChildEventHandler implements FilteredE
 	// Trash
 	// Centaur (Berserk)
 	@NpcCastCallout({0x3BFE,0x3DC0})
-	private final ModifiableCallout<AbilityCastStart> berserk = ModifiableCallout.durationBasedCall("Centaur: Berserk", "Sleep Centaur");
-	// TODO: If Centaur gains Berserk, "Run, run run"
+	private final ModifiableCallout<AbilityCastStart> berserk = ModifiableCallout.durationBasedCall("Centaur: Berserk Cast", "Sleep Centaur");
+	private final ModifiableCallout<BuffApplied> berserk_buff = new ModifiableCallout<>("Centaur: Berserk Buff", "Run, Run, Run");
 
 	// Calca (Terrifying Glance)
 	@NpcCastCallout({0x3C60})
 	private final ModifiableCallout<AbilityCastStart> terror_glance = ModifiableCallout.durationBasedCall("Calca: Terrifying Glance", "Sleep Doll");
 
 	// Sprite (Banish)
-	// @NpcCastCallout({})
+	// @NpcCastCallout({})// TODO: Find
 	// private final ModifiableCallout<AbilityCastStart> banish = ModifiableCallout.durationBasedCall("Sprite: Banish", "Interject Sprite");
 
 	// Porrogo (Toy Hammer)
-	// @NpcCastCallout({})
+	// @NpcCastCallout({})// TODO: Find
 	// private final ModifiableCallout<AbilityCastStart> toy_hammer = ModifiableCallout.durationBasedCall("Porrogo: Toy Hammer", "Sleep Frog");
 
 	// Bibliotaph (Magic Burst In/Out?)
-	// @NpcCastCallout({})
+	// @NpcCastCallout({})// TODO: Find
 	// private final ModifiableCallout<AbilityCastStart> magic_burst = ModifiableCallout.durationBasedCall("Bibliotaph: Magic Burst", "Sleep Biblio");
 
 	// Stryx (OTPOD)
@@ -141,12 +144,22 @@ public class BaldesionArsenal extends AutoChildEventHandler implements FilteredE
 
 	// --------------------------------------------------------
 
+	// --------------------------------------------------------
+	@HandleEvents
+	public void dispellEvent(EventContext context, BuffApplied event) {
+		int id = (int) event.getBuff().getId();
+		if (id == 0x000) { // TODO: Find
+			context.accept(fluorescence.getModified(event));
+		}
+	}
+
 	@HandleEvents
 	public void ionShowerEvent(EventContext context, AbilityCastStart event) {
 		if (event.getAbility().getId() == 0x39C3 && event.getTarget().isThePlayer()) {
 			context.accept(ionshower.getModified(event));
 		}
 	}
+	// --------------------------------------------------------
 
 	@HandleEvents
 	public void doritostackEvent(EventContext context, HeadMarkerEvent event) {
@@ -168,7 +181,7 @@ public class BaldesionArsenal extends AutoChildEventHandler implements FilteredE
 			context.accept(graviball.getModified(event));
 		}
 	}
-
+	// --------------------------------------------------------
 	@HandleEvents
 	public void lancingboltEvent(EventContext context, HeadMarkerEvent event) {
 		if (event.getMarkerId() == 0x008A && event.getTarget().isThePlayer()) {	// TODO: Check head marker
@@ -182,7 +195,7 @@ public class BaldesionArsenal extends AutoChildEventHandler implements FilteredE
 //			context.accept(bitter_barbs.getModified(event));
 //		}
 	}
-
+	// --------------------------------------------------------
 	@HandleEvents
 	public void accelbombEvent(EventContext context, HeadMarkerEvent event) {
 		if (event.getMarkerId() == 0x4B && event.getTarget().isThePlayer()) {
@@ -195,5 +208,14 @@ public class BaldesionArsenal extends AutoChildEventHandler implements FilteredE
 			context.accept(meteor.getModified(event));
 		}
 	}
+	// --------------------------------------------------------
+	@HandleEvents
+	public void berserkEvent(EventContext context, BuffApplied event) {
+		int id = (int) event.getBuff().getId();
+		if (id == 0x000) { // TODO: Find
+			context.accept(berserk_buff.getModified(event));
+		}
+	}
+
 
 }
