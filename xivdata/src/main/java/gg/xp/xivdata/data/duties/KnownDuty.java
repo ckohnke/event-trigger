@@ -23,6 +23,7 @@ public enum KnownDuty implements Duty {
 	EndsingerEx("EX3", 0x3e6, Expansion.EW, DutyType.TRIAL_EX),
 	BarbarEx("EX4", 1072, Expansion.EW, DutyType.TRIAL_EX),
 	Dragonsong("Dragonsong", 0x3C8, Expansion.EW, DutyType.ULTIMATE),
+	Eureka_Hydatos("Baldesion Arsenal", 0x33B, Expansion.SB, DutyType.OPEN_WORLD),
 	ASS_Criterion("Sil'dihn Subterrane (Criterion)", 0x433, Expansion.EW, DutyType.OTHER),
 	ASS_Savage("Sil'dihn Subterrane (Savage)", 0x434, Expansion.EW, DutyType.OTHER),
 //	OMEGA_PROTOCOL("Omega Protocol", 0x0, Expansion.EW, DutyType.ULTIMATE),
